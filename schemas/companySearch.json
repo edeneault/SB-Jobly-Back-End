@@ -1,0 +1,28 @@
+{
+    "$id": "http://example.com/example.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "required": [],
+    "title": "companySearch Schema",
+    "type": "object",
+    "properties": {
+        "minEmployees": {
+            "$id": "#/properties/minEmployees",
+            "title": "The minEmployees schema",
+            "minimum": 0,
+            "type": "integer"
+        },
+        "maxEmployees": {
+            "$id": "#/properties/maxEmployees",
+            "title": "The maxEmployees schema",
+            "minimum": 0,
+            "type": "integer"
+        },
+        "name": {
+            "$id": "#/properties/name",
+            "title": "The name schema",
+            "minLength": 1,
+            "type": "string"
+        }
+    },
+    "additionalProperties": false
+}
