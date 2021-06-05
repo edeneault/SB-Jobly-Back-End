@@ -54,11 +54,24 @@ function ensureAdmin(req, res, next) {
     } catch (err) {
       return next(err);
     }
-  }
+}
 
-
+// Moddleware to ensure that specific user is logged in or that the user is an administrator //
+function ensureCorrectUserOrAdmin(req, res, next) {
+    try {
+        const user = res.locals.user;
+        if (!(user && (user.isAdmin || user.username === req.params.username))) {
+            throw new UnauthorizedError();
+        }
+        return next();
+    } catch (err) {
+        return next(err);
+    }
+}
+  
 module.exports = {
     authenticateJWT,
     ensureLoggedIn,
-    ensureAdmin
+    ensureAdmin,
+    ensureCorrectUserOrAdmin
 };
