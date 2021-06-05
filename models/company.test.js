@@ -17,7 +17,7 @@ afterAll(commonAfterAll);
 
 /************************************** create */
 
-describe("create", function () {
+describe("POST / create a company", function () {
   const newCompany = {
     handle: "new",
     name: "New",
@@ -25,6 +25,8 @@ describe("create", function () {
     numEmployees: 1,
     logoUrl: "http://new.img",
   };
+    
+  
 
   test("works", async function () {
     let company = await Company.create(newCompany);
