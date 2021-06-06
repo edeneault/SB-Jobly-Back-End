@@ -4,10 +4,11 @@ const db = require("../db.js");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const Company = require("./company.js");
 const {
-  commonBeforeAll,
-  commonBeforeEach,
-  commonAfterEach,
-  commonAfterAll,
+    commonBeforeAll,
+    commonBeforeEach,
+    commonAfterEach,
+    commonAfterAll,
+    testJobIds
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -26,8 +27,6 @@ describe("POST / create a company", function () {
     logoUrl: "http://new.img",
   };
     
-  
-
   test("works", async function () {
     let company = await Company.create(newCompany);
     expect(company).toEqual(newCompany);
@@ -181,7 +180,13 @@ describe("get", function () {
       name: "C1",
       description: "Desc1",
       numEmployees: 1,
-      logoUrl: "http://c1.img",
+    logoUrl: "http://c1.img",
+    jobs: [
+        { id: testJobIds[0], title: "Job1", salary: 100, equity: "0.1" },
+        { id: testJobIds[1], title: "Job2", salary: 200, equity: "0.2" },
+        { id: testJobIds[2], title: "Job3", salary: 300, equity: "0" },
+        { id: testJobIds[3], title: "Job4", salary: null, equity: null },
+        ],
     });
   });
 

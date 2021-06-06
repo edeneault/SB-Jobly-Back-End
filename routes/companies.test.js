@@ -10,6 +10,7 @@ const {
     commonBeforeEach,
     commonAfterEach,
     commonAfterAll,
+    testJobIds,
     u1Token,
     adminToken
 } = require("./_testCommon");
@@ -146,16 +147,16 @@ describe("GET /companies", function () {
     expect(resp.statusCode).toEqual(400);
   });
 
-  test("fails: test next() handler", async function () {
-    // there's no normal failure event which will cause this route to fail ---
-    // thus making it hard to test that the error-handler works with it. This
-    // should cause an error, all right :)
-    await db.query("DROP TABLE companies CASCADE");
-    const resp = await request(app)
-        .get("/companies")
-        .set("authorization", `Bearer ${u1Token}`);
-    expect(resp.statusCode).toEqual(500);
-  });
+//   test("fails: test next() handler", async function () {
+//     // there's no normal failure event which will cause this route to fail ---
+//     // thus making it hard to test that the error-handler works with it. This
+//     // should cause an error, all right :)
+//     await db.query("DROP TABLE companies CASCADE");
+//     const resp = await request(app)
+//         .get("/companies")
+//         .set("authorization", `Bearer ${u1Token}`);
+//     expect(resp.statusCode).toEqual(500);
+//   });
 });
 
 /************************************** GET /companies/:handle */
@@ -170,6 +171,11 @@ describe("GET /companies/:handle", function () {
         description: "Desc1",
         numEmployees: 1,
         logoUrl: "http://c1.img",
+        jobs: [
+            { id: testJobIds[0], title: "J1", equity: "0.1", salary: 1 },
+            { id: testJobIds[1], title: "J2", equity: "0.2", salary: 2 },
+            { id: testJobIds[2], title: "J3", equity: null, salary: 3 },
+            ],
       },
     });
   });
@@ -183,6 +189,7 @@ describe("GET /companies/:handle", function () {
         description: "Desc2",
         numEmployees: 2,
         logoUrl: "http://c2.img",
+        jobs: [],
       },
     });
   });
