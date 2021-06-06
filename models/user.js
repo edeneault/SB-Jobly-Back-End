@@ -212,9 +212,9 @@ class User {
     }
         
 
-    // 
+    // Add job in Applications for user in joining table - many to many relationships //
     static async applyToJob(username, jobId) {
-        
+        // check for valid job using jobId return error if not found //
         const jobIdCheck = await db.query(
             `SELECT id
             FROM jobs
@@ -223,6 +223,7 @@ class User {
 
         if (!job) throw new NotFoundError(`No job: ${jobId}`);
 
+        // check for valid username using ID return error if not found //
         const userCheck = await db.query(
             `SELECT username
             FROM users

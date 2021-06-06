@@ -34,7 +34,7 @@ router.post("/", ensureAdmin, async function (req, res, next) {
 
 // GET all jobs - filters optional //
 // Filters - minSalary, hasEquity, title //
-// AUTH: no requirted //
+// AUTH: no required //
 
 router.get("/", async function (req, res, next) {
     const qParams = req.query;
@@ -54,14 +54,6 @@ router.get("/", async function (req, res, next) {
         return next(err);
     }
 });
-
-/** GET /[jobId] => { job }
- *
- * Returns { id, title, salary, equity, company }
- *   where company is { handle, name, description, numEmployees, logoUrl }
- *
- * Authorization required: none
- */
 
 // GET job by ID //
 // RETURNS job object { id, title, salary, equity, company } and associated company object //
@@ -99,6 +91,7 @@ router.patch("/:id", ensureAdmin, async function (req, res, next) {
 // DELETE by jiob ID //
 // AUTH: not required //
 // RETURNS: { deleted: id }
+
 router.delete("/:id", ensureAdmin, async function (req, res, next) {
     try {
         await Job.remove(req.params.id);
