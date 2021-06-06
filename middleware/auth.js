@@ -28,10 +28,7 @@ function authenticateJWT(req, res, next) {
   }
 }
 
-/** Middleware to use when they must be logged in.
- *
- * If not, raises Unauthorized.
- */
+// Middleware function to use before routes that require a user to be logged-in //
 
 function ensureLoggedIn(req, res, next) {
     try {
@@ -56,7 +53,7 @@ function ensureAdmin(req, res, next) {
     }
 }
 
-// Moddleware to ensure that specific user is logged in or that the user is an administrator //
+// Middleware to ensure that "owner" user is logged in or that the user is an administrator //
 function ensureCorrectUserOrAdmin(req, res, next) {
     try {
         const user = res.locals.user;
