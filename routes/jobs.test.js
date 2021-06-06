@@ -5,13 +5,13 @@ const request = require("supertest");
 const app = require("../app");
 
 const {
-  commonBeforeAll,
-  commonBeforeEach,
-  commonAfterEach,
-  commonAfterAll,
-  testJobIds,
-  u1Token,
-  adminToken,
+    commonBeforeAll,
+    commonBeforeEach,
+    commonAfterEach,
+    commonAfterAll,
+    testJobIds,
+    u1Token,
+    adminToken,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -21,7 +21,7 @@ afterAll(commonAfterAll);
 
 /************************************** POST /jobs */
 
-describe("POST /jobs", function () {
+describe("POST create new job", function () {
   test("ok for admin", async function () {
     const resp = await request(app)
         .post(`/jobs`)
@@ -44,7 +44,7 @@ describe("POST /jobs", function () {
     });
   });
 
-  test("unauth for users", async function () {
+  test("Returns unauthorized for user w/o admin priv", async function () {
     const resp = await request(app)
         .post(`/jobs`)
         .send({
@@ -84,8 +84,8 @@ describe("POST /jobs", function () {
 
 /************************************** GET /jobs */
 
-describe("GET /jobs", function () {
-  test("ok for anon", async function () {
+describe("GET all jobs", function () {
+  test("No Auth Required", async function () {
     const resp = await request(app).get(`/jobs`);
     expect(resp.body).toEqual({
           jobs: [
@@ -118,7 +118,7 @@ describe("GET /jobs", function () {
     );
   });
 
-  test("works: filtering", async function () {
+  test("GET jobs with filtering - 1 filter", async function () {
     const resp = await request(app)
         .get(`/jobs`)
         .query({ hasEquity: true });
@@ -145,7 +145,7 @@ describe("GET /jobs", function () {
     );
   });
 
-  test("works: filtering on 2 filters", async function () {
+  test("GET jobs with filtering - 2 filter", async function () {
     const resp = await request(app)
         .get(`/jobs`)
         .query({ minSalary: 2, title: "3" });
@@ -174,21 +174,21 @@ describe("GET /jobs", function () {
 
 /************************************** GET /jobs/:id */
 
-describe("GET /jobs/:id", function () {
-  test("works for anon", async function () {
+describe("GET jobs by ID", function () {
+  test("works for unauthorized users", async function () {
     const resp = await request(app).get(`/jobs/${testJobIds[0]}`);
     expect(resp.body).toEqual({
       job: {
-        id: testJobIds[0],
-        title: "J1",
-        salary: 1,
-        equity: "0.1",
-        company: {
-          handle: "c1",
-          name: "C1",
-          description: "Desc1",
-          numEmployees: 1,
-          logoUrl: "http://c1.img",
+            id: testJobIds[0],
+            title: "J1",
+            salary: 1,
+            equity: "0.1",
+            company: {
+            handle: "c1",
+            name: "C1",
+            description: "Desc1",
+            numEmployees: 1,
+            logoUrl: "http://c1.img"
         },
       },
     });
@@ -202,7 +202,7 @@ describe("GET /jobs/:id", function () {
 
 /************************************** PATCH /jobs/:id */
 
-describe("PATCH /jobs/:id", function () {
+describe("PATCH jobs by ID", function () {
   test("works for admin", async function () {
     const resp = await request(app)
         .patch(`/jobs/${testJobIds[0]}`)
@@ -216,12 +216,12 @@ describe("PATCH /jobs/:id", function () {
         title: "J-New",
         salary: 1,
         equity: "0.1",
-        companyHandle: "c1",
+        companyHandle: "c1"
       },
     });
   });
 
-  test("unauth for others", async function () {
+  test("Does not allow unauthorized users to update", async function () {
     const resp = await request(app)
         .patch(`/jobs/${testJobIds[0]}`)
         .send({
@@ -264,22 +264,22 @@ describe("PATCH /jobs/:id", function () {
 
 /************************************** DELETE /jobs/:id */
 
-describe("DELETE /jobs/:id", function () {
-  test("works for admin", async function () {
+describe("DELETE jobs by ID", function () {
+  test("Successfully for users with admin priviliges", async function () {
     const resp = await request(app)
         .delete(`/jobs/${testJobIds[0]}`)
         .set("authorization", `Bearer ${adminToken}`);
     expect(resp.body).toEqual({ deleted: testJobIds[0] });
   });
 
-  test("unauth for others", async function () {
+  test("Not successfull for usrer withouit admin priviliges", async function () {
     const resp = await request(app)
         .delete(`/jobs/${testJobIds[0]}`)
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(401);
   });
 
-  test("unauth for anon", async function () {
+  test("Not successfull for user without token", async function () {
     const resp = await request(app)
         .delete(`/jobs/${testJobIds[0]}`);
     expect(resp.statusCode).toEqual(401);
