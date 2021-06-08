@@ -145,7 +145,7 @@ describe("findAll", function () {
 
 describe("get", function () {
     test("works", async function () {
-        let job = await Job.get(testJobIds[0]);
+        let job = await Job.find(testJobIds[0]);
         expect(job).toEqual({
         id: testJobIds[0],
         title: "Job1",
@@ -163,7 +163,7 @@ describe("get", function () {
 
     test("not found if no such job", async function () {
         try {
-        await Job.get(0);
+        await Job.find(0);
         fail();
         } catch (err) {
         expect(err instanceof NotFoundError).toBeTruthy();
