@@ -50,7 +50,7 @@ class Company {
      * */
 
     static async findAll(searchFilters = {}) {
-        console.log("in find all");
+        // console.log("in find all");
         let query =
             `SELECT handle,
                     name,
@@ -59,18 +59,19 @@ class Company {
                     logo_url AS "logoUrl"
             FROM companies`;
         
+        // Initialise empty arrays to recieve future WHERE clauses and values
         let whereClauses = [];
         let queryValues = [];
-
+        // if values in seacrh filter object - destructure
         const { minEmployees, maxEmployees, name } = searchFilters;
 
-        
+        // bad value check 
         if (minEmployees > maxEmployees) {
             throw new BadRequestError("Min employees cannot be greater than max");
         }
     
-        // For each possible search term, add to whereClause and queryValues so
-        // we can generate the right SQL
+        // For each possible search term, add to whereClause and queryValues to
+        // generate the appropriate SQL
     
         if (minEmployees !== undefined) {
             queryValues.push(minEmployees);
@@ -83,6 +84,7 @@ class Company {
         }
     
         if (name) {
+            // use iLIKE to search for name with wildcard %
             queryValues.push(`%${name}%`);
             whereClauses.push(`name ILIKE $${queryValues.length}`);
         }
@@ -91,11 +93,11 @@ class Company {
             query += " WHERE " + whereClauses.join(" AND ");
         }
     
-        // Finalize query and return results
+        // Prepare query and return results
     
         query += " ORDER BY name";
         const companiesRes = await db.query(query, queryValues);
-        console.log(query, queryValues);
+        // console.log(query, queryValues);
         
         return companiesRes.rows;
     }

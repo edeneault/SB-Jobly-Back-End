@@ -78,7 +78,7 @@ class Job {
     // FIND job by ID //
     // Return job object { id, title, salary, equity, companyHandle, company } //
     // and related company object //
-    static async get(id) {
+    static async find(id) {
         const jobRes = await db.query(
             `SELECT id,
                     title,

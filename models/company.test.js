@@ -19,42 +19,45 @@ afterAll(commonAfterAll);
 /************************************** create */
 
 describe("POST / create a company", function () {
-  const newCompany = {
-    handle: "new",
-    name: "New",
-    description: "New Description",
-    numEmployees: 1,
-    logoUrl: "http://new.img",
-  };
-    
-  test("works", async function () {
-    let company = await Company.create(newCompany);
-    expect(company).toEqual(newCompany);
-
-    const result = await db.query(
-          `SELECT handle, name, description, num_employees, logo_url
-           FROM companies
-           WHERE handle = 'new'`);
-    expect(result.rows).toEqual([
-      {
+    const newCompany = {
         handle: "new",
         name: "New",
         description: "New Description",
-        num_employees: 1,
-        logo_url: "http://new.img",
-      },
-    ]);
-  });
+        numEmployees: 1,
+        logoUrl: "http://new.img"
+    };
+        
+    test("works", async function () {
+        let company = await Company.create(newCompany);
+        console.log(company);
+        
+        expect(company).toEqual(newCompany);
 
-  test("bad request with dupe", async function () {
-    try {
-      await Company.create(newCompany);
-      await Company.create(newCompany);
-      fail();
-    } catch (err) {
-      expect(err instanceof BadRequestError).toBeTruthy();
-    }
-  });
+        const result = await db.query(
+            `SELECT handle, name, description, num_employees, logo_url
+            FROM companies
+            WHERE handle = 'new'`);
+        expect(result.rowCount).toBe(1);
+        expect(result.rows).toEqual([
+            {
+                handle: "new",
+                name: "New",
+                description: "New Description",
+                num_employees: 1,
+                logo_url: "http://new.img",
+            },
+        ]);
+    });
+
+    test("bad request with dupe", async function () {
+        try {
+        await Company.create(newCompany);
+        await Company.create(newCompany);
+        fail();
+        } catch (err) {
+        expect(err instanceof BadRequestError).toBeTruthy();
+        }
+    });
 });
 
 /************************************** findAll */
@@ -155,7 +158,7 @@ describe("findAll", function () {
     });
 
     test("works: empty list on nothing found", async function () {
-    let companies = await Company.findAll({ name: "nope" });
+    let companies = await Company.findAll({ name: "noname" });
     expect(companies).toEqual([]);
     });
 
