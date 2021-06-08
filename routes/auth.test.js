@@ -65,7 +65,7 @@ describe("POST /auth/token", function () {
         .post("/auth/token")
         .send({
           username: 42,
-          password: "above-is-a-number",
+          password: "password",
         });
     expect(resp.statusCode).toEqual(400);
   });
